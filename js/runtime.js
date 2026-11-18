@@ -44,9 +44,24 @@
     },
   };
   setTimeout(() => document.documentElement.classList.add('loaded'), 7000);
+  /* the page stays hidden under the loading screen until the real fonts are in, otherwise the text
+     reflows when they swap in and Google counts it as layout shift. 7s cap in case Fontshare is down */
+  const fontsReady = () => document.documentElement.classList.add('fonts-ready');
+  setTimeout(fontsReady, 7000);
   try {
-    document.fonts.ready.then(() => LOAD.done('fonts'));
+    Promise.all(
+      ['700 1em "Clash Display"', '400 1em Chillax', '500 1em Chillax', '600 1em Chillax'].map((f) =>
+        document.fonts.load(f)
+      )
+    )
+      .then(() => document.fonts.ready)
+      .catch(() => {})
+      .then(() => {
+        fontsReady();
+        LOAD.done('fonts');
+      });
   } catch (e) {
+    fontsReady();
     LOAD.done('fonts');
   }
 

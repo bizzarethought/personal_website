@@ -1088,6 +1088,13 @@ a.chip:hover {
 html:not(.loaded) .cell {
   animation-play-state: paused;
 }
+/* hidden (but still laid out) until the fonts are in, so nothing reflows on screen. it's all under
+   the loading screen anyway; runtime.js adds .fonts-ready */
+html:not(.fonts-ready) .home .top,
+html:not(.fonts-ready) .home .wrap,
+html:not(.fonts-ready) .page {
+  visibility: hidden;
+}
 /* js/motion.js animates the tiles with GSAP when it is available */
 .gsap .cell {
   animation: none;
