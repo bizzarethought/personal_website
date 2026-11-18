@@ -1,0 +1,1965 @@
+/* VOICE  personal and playful, but clean enough for a recruiter to skim in ten seconds.
+   IDEA   a periodic table of me: each section is an element tile, colour-coded like a real table, that grows into its page.
+   PICTURE a 3D meadow at the foot of every screen, under a pale sky, bending in the wind and around the cursor. Robots live on the tiles.
+   TYPE   Clash Display for bold, modern headings; Chillax for rounded, playful reading.
+
+   CUSTOMISE: colours and fonts are the variables just below. Each tile's colour is set in the SITE object.
+   Words, tiles, projects and roles live in js/content.js. Images are in img/. */
+:root {
+  color-scheme: light dark;
+  --mh: clamp(170px, min(28.6vw, 36vh), 400px);
+  /* colours and shadows come from Open Props 1.7.23, sizes from Utopia */
+  --tile-experience: var(--indigo-7);
+  --tile-projects: var(--red-9);
+  --tile-about: var(--yellow-3);
+  --tile-contact: var(--cyan-1);
+  --black: #000;
+  --tile-ink: var(--black);
+  --tile-light-ink: var(--gray-0);
+  --bg: light-dark(var(--gray-0), var(--black));
+  --ink: light-dark(var(--black), var(--gray-1));
+  --mute: light-dark(var(--gray-7), var(--gray-4));
+  --slab: light-dark(var(--black), var(--gray-1));
+  --slab-ink: light-dark(var(--gray-0), var(--black));
+  /* pure black keeps the UI and the top of the sky from looking washed out.
+     the sky is one long twilight ramp: ink blue → muted violet → dusty rose → peach,
+     tuned by hand rather than taken from Open Props */
+  --sky: var(--s6);
+  --s1: light-dark(#edf0f8, #090d17);
+  --s2: light-dark(#dce4f4, #161c30);
+  --s3: light-dark(#ced8ee, #343453);
+  --s4: light-dark(#d6cfe8, #514362);
+  --s5: light-dark(#e7ccdc, #79556f);
+  --s6: light-dark(#f2d0ca, #aa737e);
+  --s7: light-dark(#f7dcbf, #d6a08f);
+  --glow: light-dark(rgba(255, 207, 161, 0.24), rgba(255, 184, 139, 0.16));
+  --star: light-dark(rgba(73, 99, 151, 0.7), rgba(242, 247, 255, 0.95));
+  --green: var(--green-9);
+  --red: var(--red-7);
+  --cyan: var(--cyan-4);
+  --line: light-dark(var(--black), var(--gray-8));
+  --display: "Clash Display", system-ui, sans-serif;
+  --read: "Chillax", system-ui, sans-serif;
+  /* Utopia fluid scales: 360–1240px, 18–20px base, 1.2–1.25 ratios
+     https://utopia.fyi/type/calculator/?c=360,18,1.2,1240,20,1.25,5,2
+     https://utopia.fyi/space/calculator/?c=360,18,1.2,1240,20,1.25,5,2
+     in rem, so they still follow the reader's own font size */
+  --step--2: clamp(0.7813rem, 0.7736rem + 0.0341vw, 0.8rem);
+  --step--1: clamp(0.9375rem, 0.9119rem + 0.1136vw, 1rem);
+  --step-0: clamp(1.125rem, 1.0739rem + 0.2273vw, 1.25rem);
+  --step-1: clamp(1.35rem, 1.2631rem + 0.3864vw, 1.5625rem);
+  --step-2: clamp(1.62rem, 1.4837rem + 0.6057vw, 1.9531rem);
+  --step-3: clamp(1.944rem, 1.7405rem + 0.9044vw, 2.4414rem);
+  --step-4: clamp(2.3328rem, 2.0387rem + 1.3072vw, 3.0518rem);
+  --step-5: clamp(2.7994rem, 2.384rem + 1.8461vw, 3.8147rem);
+  --space-3xs: clamp(0.3125rem, 0.3125rem + 0vw, 0.3125rem);
+  --space-2xs: clamp(0.5625rem, 0.5369rem + 0.1136vw, 0.625rem);
+  --space-xs: clamp(0.875rem, 0.8494rem + 0.1136vw, 0.9375rem);
+  --space-s: clamp(1.125rem, 1.0739rem + 0.2273vw, 1.25rem);
+  --space-m: clamp(1.6875rem, 1.6108rem + 0.3409vw, 1.875rem);
+  --space-l: clamp(2.25rem, 2.1477rem + 0.4545vw, 2.5rem);
+  --space-xl: clamp(3.375rem, 3.2216rem + 0.6818vw, 3.75rem);
+  --space-2xl: clamp(4.5rem, 4.2955rem + 0.9091vw, 5rem);
+  --space-s-m: clamp(1.125rem, 0.8182rem + 1.3636vw, 1.875rem);
+  --space-s-l: clamp(1.125rem, 0.5625rem + 2.5vw, 2.5rem);
+  --space-l-xl: clamp(2.25rem, 1.6364rem + 2.7273vw, 3.75rem);
+  --gutter: var(--space-s-l);
+  --ease: cubic-bezier(0.7, 0, 0.2, 1);
+  --out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+  min-width: 0;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: var(--step-0)/1.65 var(--read);
+  overflow-x: clip;
+}
+a {
+  color: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 3px;
+}
+
+.home {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--bg) 8%,
+    var(--s2) 40%,
+    var(--s4) 62%,
+    var(--s6) 82%,
+    var(--s7) 96%
+  );
+  background:
+    radial-gradient(90% 36% at 24% 86%, var(--glow), transparent 75%),
+    linear-gradient(
+      in oklab 180deg,
+      var(--bg) 6%,
+      var(--s1) 20%,
+      var(--s2) 34%,
+      var(--s3) 47%,
+      var(--s4) 58%,
+      var(--s5) 68%,
+      var(--s6) 78%,
+      var(--s7) 92%
+    );
+}
+/* stars twinkle on their own: soft blue by day, bright white at night. a few have little glints,
+   and on the home screen they fade out towards the horizon */
+.stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 10%, transparent 54%);
+  mask-image: linear-gradient(180deg, #000 10%, transparent 54%);
+}
+.stars i {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--star);
+  opacity: var(--hi);
+  animation: twinkle var(--d) ease-in-out var(--dl) infinite;
+}
+.stars i.glint::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background:
+    linear-gradient(var(--star), var(--star)) center/1px 100% no-repeat,
+    linear-gradient(var(--star), var(--star)) center/100% 1px no-repeat;
+  border-radius: 50%;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: var(--lo);
+    transform: scale(0.65);
+  }
+  40% {
+    opacity: var(--hi);
+    transform: scale(1.25);
+  }
+  60% {
+    opacity: calc(var(--hi) * 0.4);
+    transform: scale(0.85);
+  }
+  78% {
+    opacity: calc(var(--hi) * 0.8);
+    transform: scale(1.05);
+  }
+}
+.top {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px var(--gutter);
+}
+.logo {
+  font: 700 24px/1 var(--display);
+  letter-spacing: -1px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.top nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.top nav a {
+  font: 500 var(--step--1)/1 var(--read);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 11px;
+}
+.top nav a:not(.ext) {
+  background: linear-gradient(var(--ink), var(--ink)) 11px calc(100% - 10px) / 0
+    3px no-repeat;
+  transition: background-size 0.35s var(--out);
+}
+.top nav a:not(.ext):hover {
+  background-size: calc(100% - 22px) 3px;
+}
+.top nav a.ext {
+  border: 2px solid var(--line);
+  margin-left: 6px;
+}
+.top nav a.ext:hover {
+  background: var(--slab);
+  color: var(--slab-ink);
+}
+/* the content column keeps its width however wide the window is (the side margins sit outside it), and grows a little on big screens */
+.wrap {
+  --cw: clamp(740px, 54vw, 920px);
+  width: 100%;
+  max-width: calc(var(--cw) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.home .wrap {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: calc(var(--mh) * 0.8 + 10px);
+}
+.hero {
+  position: relative;
+  margin-top: 72px;
+}
+.slab {
+  display: inline-block;
+  position: relative;
+  background: var(--slab);
+  color: var(--slab-ink);
+  margin: 0;
+  font: 700 var(--step-4)/1.2 var(--display);
+  letter-spacing: 0;
+  padding: 0.18em 0.45em 0.22em 0.55em;
+  box-shadow: inset 0.16em 0 0 var(--green);
+}
+.slab,
+.ptitle h2,
+.proj h3,
+.role h3 {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.intro {
+  margin: var(--space-s) 0 0;
+  max-width: 58ch;
+  font-size: var(--step-0);
+}
+.chip {
+  display: inline-block;
+  background: var(--slab);
+  color: var(--slab-ink);
+  font: 500 0.82em/1.5 var(--read);
+  padding: 0.05em 0.45em;
+  text-decoration: none;
+  margin: 0 0.1em;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+a.chip:hover {
+  background: var(--green);
+  color: #fff;
+}
+
+/* the board: element tiles, colour-coded by kind like a real periodic table */
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-s-m);
+  margin-top: var(--space-xl);
+}
+/* shorter laptop windows: tighten the spacing so the whole first screen, meadow robots included, fits without scrolling */
+@media (min-width: 700px) and (max-height: 880px) {
+  .hero {
+    margin-top: 56px;
+  }
+  .board {
+    margin-top: 36px;
+  }
+  .home .wrap {
+    --cw: clamp(740px, 50vw, 800px);
+    padding-bottom: calc(var(--mh) * 0.7 + 10px);
+  }
+}
+@media (min-width: 700px) and (max-height: 760px) {
+  .hero {
+    margin-top: 40px;
+  }
+  .board {
+    margin-top: 30px;
+  }
+  .home .wrap {
+    padding-bottom: calc(var(--mh) * 0.56 + 10px);
+  }
+}
+.cell {
+  position: relative;
+  animation: land 0.7s var(--out) both;
+  animation-delay: calc(var(--i) * 70ms + 120ms);
+}
+@keyframes land {
+  from {
+    transform: translateY(26px);
+    opacity: 0.001;
+  }
+}
+.tile {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 3px solid var(--line);
+  background: var(--c);
+  color: var(--t);
+  cursor: pointer;
+  overflow: hidden;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+  box-shadow:
+    5px 5px 0 var(--line),
+    var(--shadow-3);
+  transition:
+    transform 0.35s var(--out),
+    box-shadow 0.35s var(--out);
+}
+.tile .n {
+  position: absolute;
+  left: 9px;
+  top: 7px;
+  font: 600 13px/1 var(--read);
+}
+.tile .sym {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  font: 700 var(--step-4)/1 var(--display);
+  letter-spacing: -0.01em;
+}
+.tile .nm {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 11%;
+  text-align: center;
+  font: 600 var(--step--2)/1.2 var(--read);
+}
+.tile:hover,
+.tile:focus-visible {
+  transform: translate(-2px, -5px);
+  box-shadow:
+    7px 10px 0 var(--line),
+    var(--shadow-4);
+}
+
+/* robots: one sprite sheet per look, frames picked by script */
+.bot {
+  position: absolute;
+  bottom: 0;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  transform-origin: 50% 100%;
+  transition: translate 0.35s var(--out);
+}
+.cell:has(.tile:hover) .perch,
+.cell:has(.tile:hover) .moss {
+  translate: -2px -5px;
+}
+/* moss grown on each tile's top corners and sides with the tree file's Moss - Add nodes, with bluebells and dandelions
+   from the meadow file growing out of it. Rendered in Blender; each tile has its own (img/moss-0 to 4) */
+.moss {
+  position: absolute;
+  z-index: 2;
+  left: -25%;
+  top: -30%;
+  width: 150%;
+  aspect-ratio: 360/350;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  transition: translate 0.35s var(--out);
+}
+.cell .perch {
+  z-index: 3;
+}
+/* the same moss on the title slabs: across the top and down the left side (img/moss-hero, img/moss-title) */
+.smoss {
+  position: absolute;
+  z-index: 1;
+  left: -12%;
+  width: 124%;
+  top: -60%;
+  height: 190%;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.slab .perch,
+.ptitle .perch {
+  z-index: 3;
+}
+.ptitle .smoss {
+  top: 0;
+  height: auto;
+  aspect-ratio: 1200/329;
+  margin-top: -10.7%;
+}
+.tile .n {
+  top: 7px;
+}
+.bot .face {
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  background-repeat: no-repeat;
+}
+.bot::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -3px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(10, 14, 8, 0.28);
+  z-index: -1;
+}
+.bot.hop {
+  animation: hop 0.5s var(--ease);
+}
+@keyframes hop {
+  40% {
+    transform: translateY(-14px);
+  }
+}
+.bot.sus .face {
+  animation: blip 0.42s steps(1) 1;
+}
+@keyframes blip {
+  0% {
+    filter: drop-shadow(-3px 0 var(--red)) drop-shadow(3px 0 var(--cyan));
+    translate: 2px 0;
+  }
+  30% {
+    filter: none;
+    translate: 0 0;
+  }
+  55% {
+    filter: drop-shadow(2px 0 var(--red)) drop-shadow(-2px 0 var(--cyan));
+    translate: -1px 0;
+  }
+  75%,
+  100% {
+    filter: none;
+    translate: 0 0;
+  }
+}
+.perch {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 0;
+  transition: translate 0.35s var(--out);
+}
+.perch .bot {
+  z-index: 1;
+}
+/* grass: clumps of the Intrusion tufts rooted behind each edge, swaying on their own; a gust bends them on hover */
+.tuft {
+  position: absolute;
+  bottom: -13px;
+  width: auto;
+  pointer-events: none;
+  transform-origin: 50% 100%;
+  scale: var(--f, 1) 1;
+  rotate: var(--r);
+  animation: sway var(--d) ease-in-out var(--dl) infinite alternate;
+}
+.tuft.front {
+  z-index: 2;
+}
+.slab .tuft,
+.ptitle .tuft {
+  bottom: -4px;
+}
+@keyframes sway {
+  from {
+    rotate: calc(var(--r) - 2.5deg);
+  }
+  to {
+    rotate: calc(var(--r) + 2.5deg);
+  }
+}
+.gust .tuft {
+  animation: gust 0.9s cubic-bezier(0.3, 0, 0.3, 1) both;
+}
+@keyframes gust {
+  30% {
+    rotate: calc(var(--r) + 11deg);
+  }
+  65% {
+    rotate: calc(var(--r) - 4deg);
+  }
+}
+
+.me3d {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.me3d.on {
+  opacity: 1;
+}
+
+/* the meadow: a real 3D field drawn in the browser; the Blender render shows until it loads, or if WebGL is off */
+.meadow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: var(--mh);
+  background: url(../img/meadow.webp?v=26) center top/max(100%, 1100px) auto
+    no-repeat;
+}
+.field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.meadow.live,
+.pmeadow.live {
+  background: none;
+}
+
+/* glitch: two coloured copies of a heading that jump for a moment */
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  padding: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+.glitch.on::before {
+  opacity: 0.9;
+  color: var(--red);
+  animation: gl 0.32s steps(2) both;
+}
+.glitch.on::after {
+  opacity: 0.9;
+  color: var(--cyan);
+  animation: gl 0.32s steps(2) reverse both;
+}
+@keyframes gl {
+  0% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(-4px, 0);
+  }
+  25% {
+    clip-path: inset(55% 0 20% 0);
+    transform: translate(4px, 0);
+  }
+  50% {
+    clip-path: inset(30% 0 45% 0);
+    transform: translate(-3px, 1px);
+  }
+  75% {
+    clip-path: inset(70% 0 5% 0);
+    transform: translate(3px, -1px);
+  }
+  100% {
+    clip-path: inset(0 0 100% 0);
+    transform: none;
+  }
+}
+
+/* opening a tile: it lifts off the board and grows to fill the screen, its symbol swelling;
+   then the colour drains upward like a blind and the page is underneath */
+.morph {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  color: var(--t);
+  pointer-events: none;
+}
+.morph-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--c);
+  border: 3px solid var(--line);
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.morph b {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  font: 700 52px/1 var(--display);
+  letter-spacing: -0.01em;
+  will-change: transform, opacity;
+}
+.blind {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  background: var(--c);
+  pointer-events: none;
+  will-change: transform;
+}
+.page {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: var(--bg);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: none;
+}
+.page.open {
+  display: block;
+}
+.pg {
+  min-height: 100%;
+  overflow-x: clip;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    180deg,
+    var(--bg) calc(100% - 680px),
+    var(--s2) calc(100% - 510px),
+    var(--s4) calc(100% - 370px),
+    var(--s6) calc(100% - 250px),
+    var(--s7) calc(100% - 100px)
+  );
+  background:
+    radial-gradient(
+      90% 280px at 24% calc(100% - 130px),
+      var(--glow),
+      transparent 75%
+    ),
+    linear-gradient(
+      in oklab 180deg,
+      var(--bg) calc(100% - 680px),
+      var(--s1) calc(100% - 590px),
+      var(--s2) calc(100% - 510px),
+      var(--s3) calc(100% - 440px),
+      var(--s4) calc(100% - 370px),
+      var(--s5) calc(100% - 300px),
+      var(--s6) calc(100% - 225px),
+      var(--s7) calc(100% - 110px)
+    );
+}
+/* inner pages: stars all the way down the dark part of a long page. They fade out before the sky colours, and are dimmer
+   behind the text column so they never compete with the words */
+.pg {
+  position: relative;
+  isolation: isolate;
+}
+.pg .stars {
+  z-index: -1;
+  -webkit-mask-image:
+    linear-gradient(
+      180deg,
+      #000 calc(100% - 640px),
+      transparent calc(100% - 380px)
+    ),
+    linear-gradient(
+      90deg,
+      #000 calc(50% - 420px),
+      rgba(0, 0, 0, 0.3) calc(50% - 370px),
+      rgba(0, 0, 0, 0.3) calc(50% + 370px),
+      #000 calc(50% + 420px)
+    );
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(
+      180deg,
+      #000 calc(100% - 640px),
+      transparent calc(100% - 380px)
+    ),
+    linear-gradient(
+      90deg,
+      #000 calc(50% - 420px),
+      rgba(0, 0, 0, 0.3) calc(50% - 370px),
+      rgba(0, 0, 0, 0.3) calc(50% + 370px),
+      #000 calc(50% + 420px)
+    );
+  mask-composite: intersect;
+}
+.page .bar {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px var(--gutter);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 calc(100% - 14px),
+    transparent
+  );
+  mask-image: linear-gradient(180deg, #000 calc(100% - 14px), transparent);
+}
+.back {
+  font: 600 var(--step--1)/1 var(--read);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 3px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+.back:hover {
+  background: var(--slab);
+  color: var(--slab-ink);
+}
+.ptitle {
+  position: relative;
+  background: var(--slab);
+  color: var(--slab-ink);
+  box-shadow: inset 12px 0 0 var(--green);
+  padding: 14px 22px 14px 32px;
+  margin: var(--space-2xl) 0 var(--space-l);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ptitle .el {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  background: var(--c);
+  color: var(--t);
+  font: 700 var(--step-1)/1 var(--display);
+}
+.ptitle h2 {
+  position: relative;
+  margin: 0;
+  font: 700 var(--step-3)/1.2 var(--display);
+  letter-spacing: 0;
+}
+.rise > * {
+  animation: rise 0.36s var(--out) both;
+  animation-delay: min(200ms, calc(var(--k, 0) * 35ms + 60ms));
+}
+/* below the fold, js/motion.js reveals these on scroll instead */
+.rise > .scroll-in {
+  animation: none;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+.proj h3,
+.role h3 {
+  position: relative;
+  margin: 0;
+  font: 600 var(--step-2)/1.15 var(--read);
+  letter-spacing: -0.01em;
+}
+.role h3 {
+  font-size: var(--step-1);
+  line-height: 1.2;
+}
+.proj p,
+.role p {
+  margin: 8px 0 0;
+}
+.meta {
+  font: 500 var(--step--1)/1.4 var(--read);
+  color: var(--mute);
+  margin-top: 6px;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.tags span {
+  font: 500 13px/1 var(--read);
+  padding: 6px 10px;
+  border: 2px solid var(--line);
+}
+.shot {
+  position: relative;
+  align-self: start;
+  margin-top: 40px;
+}
+.shot img.pic {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+.proj .go {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.proj .go a,
+.btn {
+  font: 600 var(--step--1)/1 var(--read);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  text-decoration: none;
+  background: var(--slab);
+  color: var(--slab-ink);
+  transition: background 0.2s;
+}
+.proj .go a:hover,
+.btn:hover {
+  background: var(--green);
+  color: #fff;
+}
+.role {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--space-s);
+  border-top: 3px solid var(--line);
+  padding: var(--space-m) 0;
+}
+.todo {
+  border-bottom: 2px dashed var(--red);
+}
+.note {
+  font: 500 var(--step--1)/1.4 var(--read);
+  color: var(--mute);
+  margin: var(--space-s) 0 0;
+}
+.state {
+  margin: 0 0 6px;
+  max-width: 30ch;
+  font: 500 var(--step-3)/1.2 var(--display);
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+.state em {
+  font-style: normal;
+}
+.lede {
+  margin: var(--space-s) 0 0;
+  max-width: 58ch;
+}
+/* facts are small element tiles too */
+.els {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+  margin-top: var(--space-l);
+}
+.els > div {
+  position: relative;
+  border: 3px solid var(--line);
+  background: var(--bg);
+  padding: 46px 16px 16px;
+}
+.els .s {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  font: 600 22px/1 var(--read);
+}
+.els .i {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font: 600 12px/1 var(--read);
+}
+.els b {
+  display: block;
+  font: 600 18px/1.2 var(--read);
+}
+.els span {
+  display: block;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--mute);
+  overflow-wrap: anywhere;
+  margin-top: 4px;
+}
+.els a {
+  color: var(--ink);
+}
+.copy {
+  margin-top: 10px;
+  font: 600 13px/1 var(--read);
+  min-height: 36px;
+  padding: 0 12px;
+  border: 2px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+.copy:hover {
+  background: var(--slab);
+  color: var(--slab-ink);
+}
+.pmeadow {
+  position: relative;
+  margin-top: auto;
+  padding-top: 48px;
+  height: clamp(170px, 27vw, 330px);
+  background: url(../img/meadow.webp?v=26) center top/max(100%, 1100px) auto
+    no-repeat;
+  flex: none;
+}
+.pspace {
+  height: 56px;
+  flex: none;
+}
+@media (max-width: 700px) {
+  .board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 22px;
+    row-gap: 66px;
+    width: 100%;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 10px;
+  }
+  .proj,
+  .role {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .top nav a:not(.ext) {
+    display: none;
+  }
+  .hero {
+    margin-top: 64px;
+  }
+  .me3d {
+    scale: 0.72;
+  }
+  .shot {
+    margin-top: 24px;
+  }
+}
+/* loading screen: shown until fonts, the robot and the meadow are in, so nothing pops in half-built */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  background: var(--bg);
+  transition:
+    opacity 0.5s var(--out),
+    visibility 0.5s;
+}
+.loader b {
+  font: 700 44px/1 var(--display);
+  letter-spacing: -1px;
+}
+.lstage {
+  position: relative;
+  width: min(420px, 80vw);
+  height: 84px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+.lb {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: var(--w);
+  height: 54px;
+  background-size: var(--sw) 54px;
+  background-repeat: no-repeat;
+  animation:
+    lmarch 6.3s linear infinite,
+    lwalk 0.8s steps(8) infinite;
+}
+@keyframes lmarch {
+  from {
+    transform: translateX(-60px);
+  }
+  to {
+    transform: translateX(min(480px, calc(80vw + 60px)));
+  }
+}
+@keyframes lwalk {
+  from {
+    background-position: var(--x0) 0;
+  }
+  to {
+    background-position: var(--x1) 0;
+  }
+}
+.lgrass {
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  height: 8px !important;
+  width: auto !important;
+  background: color-mix(in srgb, var(--ink) 10%, transparent) !important;
+  border-radius: 4px;
+}
+.lgrass s {
+  border-radius: 4px;
+  background: linear-gradient(90deg, #2f7d3a, #6db33f) !important;
+}
+.lcap {
+  margin: 0;
+  font: 500 14px/1 var(--read);
+  color: var(--mute);
+  min-height: 14px;
+}
+.loader i {
+  display: block;
+  width: 140px;
+  height: 3px;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+  overflow: hidden;
+}
+.loader s {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--green);
+  transform-origin: left;
+  transform: scaleX(0.08);
+  transition: transform 0.45s var(--out);
+}
+.loaded .loader {
+  opacity: 0;
+  visibility: hidden;
+}
+html:not(.loaded) .cell {
+  animation-play-state: paused;
+}
+/* js/motion.js animates the tiles with GSAP when it is available */
+.gsap .cell {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* each page starts its sky from its own colour instead of the home page's blue band.
+   the meadow picks up the same colours when its canvas moves here */
+.page {
+  --s1: color-mix(in oklab, var(--bg) 65%, var(--s2));
+  --sky: var(--s6);
+}
+.page[data-section="experience"] {
+  --bg: light-dark(#f3f5fa, var(--black));
+  --s2: light-dark(#dce5f3, #151c2e);
+  --s3: light-dark(#d0d9ed, #343953);
+  --s4: light-dark(#d5d1e8, #504964);
+  --s5: light-dark(#e2cfe0, #716079);
+  --s6: light-dark(#eed3d1, #9d7d8a);
+  --s7: light-dark(#f6ddc6, #c4a397);
+}
+.page[data-section="projects"] {
+  --bg: light-dark(#faf4f2, var(--black));
+  --s2: light-dark(#eee2ed, #1b1428);
+  --s3: light-dark(#e4d6e8, #40304b);
+  --s4: light-dark(#e3cede, #5a405d);
+  --s5: light-dark(#eacbce, #80566e);
+  --s6: light-dark(#f1cebf, #ac7880);
+  --s7: light-dark(#f8ddc0, #d5a38d);
+}
+.page[data-section="about"] {
+  --bg: light-dark(#f8f6ef, var(--black));
+  --s2: light-dark(#e6e5ef, #181c2b);
+  --s3: light-dark(#dcdbea, #3d3b50);
+  --s4: light-dark(#ded4e3, #575064);
+  --s5: light-dark(#e7d4d7, #7c6878);
+  --s6: light-dark(#efdbc8, #a88b8c);
+  --s7: light-dark(#f7e4c5, #d1b09a);
+}
+.page[data-section="contact"] {
+  --bg: light-dark(#f0f6f8, var(--black));
+  --s2: light-dark(#dce9ef, #111d2c);
+  --s3: light-dark(#d0dfe9, #303f54);
+  --s4: light-dark(#d2d6e6, #4a506b);
+  --s5: light-dark(#dfd2e1, #6c637f);
+  --s6: light-dark(#ecd3d6, #977f95);
+  --s7: light-dark(#f4ddcf, #bfa1a7);
+}
+.sky-weather {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  max-height: 680px;
+}
+.pg .sky-weather {
+  z-index: -1;
+}
+.cloud {
+  position: absolute;
+  width: clamp(220px, 35vw, 540px);
+  height: 100px;
+  background:
+    radial-gradient(
+      ellipse at 35% 65%,
+      light-dark(#ffffff65, #ffffff00),
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse at 65% 45%,
+      light-dark(#ffffff70, #ffffff00),
+      transparent 65%
+    );
+  animation: cloud-drift 70s ease-in-out infinite alternate;
+}
+.cloud-one {
+  top: 9%;
+  left: -5%;
+}
+.cloud-two {
+  top: 28%;
+  right: 0;
+  scale: 1.3 0.8;
+  animation-duration: 95s;
+  animation-delay: -38s;
+}
+.cloud-three {
+  top: 49%;
+  left: 22%;
+  scale: 0.8 0.7;
+  animation-duration: 85s;
+  animation-delay: -19s;
+}
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-35px);
+  }
+  to {
+    transform: translateX(95px);
+  }
+}
+.shooting-star {
+  --meteor-travel: clamp(60px, 20vw, 260px);
+  --meteor-color: light-dark(#4263eb, #f5f5ff);
+  position: absolute;
+  top: 10%;
+  left: 55%;
+  width: clamp(48px, 8vw, 110px);
+  height: 2px;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, var(--meteor-color));
+  transform: rotate(28deg);
+  animation: shooting-star 14s linear 3s infinite;
+}
+.shooting-star::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--meteor-color);
+  box-shadow: 0 0 8px var(--meteor-color);
+}
+@keyframes shooting-star {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(28deg);
+  }
+  2% {
+    opacity: 1;
+  }
+  9%,
+  100% {
+    opacity: 0;
+    transform: translate(
+        var(--meteor-travel),
+        calc(var(--meteor-travel) * 0.53)
+      )
+      rotate(28deg);
+  }
+}
+/* first one goes once the loading screen has gone */
+html:not(.loaded) .shooting-star {
+  animation-play-state: paused;
+}
+html[data-section] .home .stars i,
+html[data-section] .home .sky-weather i,
+html[data-sky-paused] .stars i,
+html[data-sky-paused] .sky-weather i,
+html[data-game-open] .stars i,
+html[data-game-open] .sky-weather i {
+  animation-play-state: paused;
+}
+.travelling-robot {
+  position: fixed !important;
+  z-index: 50;
+  pointer-events: none;
+  transform-origin: 0 0;
+  will-change: transform;
+  animation: none !important;
+  transition: none !important;
+}
+.pg.guided .ptitle {
+  animation: none;
+}
+.cell.pressed .tile {
+  transform: translate(1px, 2px);
+  box-shadow: 2px 2px 0 var(--line);
+}
+.tile {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* a small launch card; the game only loads if you ask for it */
+.project-preview {
+  border: 3px solid var(--line);
+  box-shadow:
+    4px 4px 0 var(--line),
+    var(--shadow-2);
+  overflow: hidden;
+}
+.game-preview {
+  display: flex;
+  flex-direction: column;
+  height: 180px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.game-preview > img {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  object-fit: cover;
+}
+.game-preview-caption {
+  flex: none;
+  border-top: 3px solid var(--line);
+}
+.game-preview-caption button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 0;
+  background: var(--slab);
+  color: var(--slab-ink);
+  font: 600 13px/1.4 var(--read);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.game-preview-caption button:hover {
+  background: var(--green);
+  color: #fff;
+}
+.game-preview-caption button:focus-visible {
+  outline-offset: -5px;
+}
+@media (max-width: 700px) {
+  .game-preview {
+    height: 160px;
+  }
+}
+.game-dialog {
+  position: fixed;
+  inset: 0;
+  max-width: 1000px;
+  width: calc(100% - 32px);
+  height: min(700px, calc(100dvh - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 3px solid var(--line);
+  border-radius: 0;
+  box-shadow:
+    8px 8px 0 var(--line),
+    var(--shadow-5);
+  background: var(--bg);
+  color: var(--ink);
+  overflow: hidden;
+}
+.game-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.game-dialog::backdrop {
+  background: light-dark(rgba(18, 22, 17, 0.65), rgba(0, 0, 0, 0.75));
+}
+.game-dialog-bar {
+  border-bottom: 3px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  flex: none;
+}
+.game-dialog-bar h2 {
+  font: 600 24px/1.05 var(--read);
+  letter-spacing: -0.03em;
+  padding: 8px 12px;
+  border-left: 6px solid var(--green);
+  background: var(--slab);
+  color: var(--slab-ink);
+  margin: 0 auto 0 0;
+}
+.game-dialog-bar a {
+  min-height: 44px;
+  font: 600 12px/1.4 var(--read);
+}
+.game-dialog-bar button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  background: var(--bg);
+  color: inherit;
+  font: 600 12px/1.4 var(--read);
+  border-radius: 0;
+  cursor: pointer;
+}
+.game-dialog-bar button:hover {
+  background: var(--slab);
+  color: var(--slab-ink);
+}
+.game-loading {
+  margin: 0;
+  padding: 12px 16px;
+  font: 400 14px/1.4 var(--read);
+  color: var(--mute);
+}
+.game-dialog iframe {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: var(--bg);
+}
+@media (max-width: 540px) {
+  .game-dialog {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+  .game-dialog-bar {
+    gap: 10px;
+    padding: 8px 12px;
+  }
+  .game-dialog-bar h2 {
+    font-size: 18px;
+    padding: 8px;
+  }
+  .game-dialog-bar a {
+    font-size: 11px;
+  }
+  .game-dialog-bar button {
+    padding: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shooting-star {
+    display: none;
+  }
+  .cloud {
+    transform: none;
+  }
+}
+
+/* Phosphor icons, fill style (see STYLE in js/icons.js). just the ones we use; the text labels do the accessible naming */
+.icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  vertical-align: middle;
+  pointer-events: none;
+}
+.top nav a {
+  gap: 7px;
+}
+.top nav .icon {
+  width: 16px;
+  height: 16px;
+  flex-basis: 16px;
+}
+.back,
+.proj .go a,
+.copy,
+.game-dialog-bar a,
+.game-dialog-bar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.els .s .icon {
+  width: 23px;
+  height: 23px;
+}
+@media (max-width: 540px) {
+  .game-dialog-bar a {
+    gap: 5px;
+  }
+  .game-dialog-bar a .icon {
+    width: 15px;
+    height: 15px;
+    flex-basis: 15px;
+  }
+}
+.copy span {
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+/* buttons push down and to the right when pressed, like a tile sinking into its shadow */
+.top nav a:active,
+.chip:active,
+.back:active,
+.proj .go a:active,
+.copy:active,
+.game-preview-caption button:active,
+.game-dialog-bar a:active,
+.game-dialog-bar button:active,
+.terminal-bar button:active {
+  transform: translate(1px, 2px);
+}
+
+/* icons nudge the way they point */
+.icon {
+  transition:
+    translate 0.25s var(--out),
+    rotate 0.25s var(--out);
+}
+.back:hover .icon-arrow-left {
+  translate: -3px 0;
+}
+a:hover > .icon-external-link {
+  translate: 2px -2px;
+}
+.game-preview-caption button:hover .icon-play,
+.proj .go a:hover .icon-play {
+  translate: 2px 0;
+}
+.copy:hover .icon-copy {
+  rotate: -10deg;
+}
+.top nav a:hover > .icon:not(.icon-external-link) {
+  translate: 0 -2px;
+}
+
+/* throwable robots (js/toss.js): a loose robot sits in a fixed layer above the home page but under
+   inner pages (30), moved with translate and spun about its middle */
+.toss-on .home .cell .perch .bot,
+.toss-layer .bot {
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+.toss-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+}
+.toss-layer .bot {
+  top: 0;
+  bottom: auto;
+  transition: none;
+  transform-origin: 50% 50%;
+  animation: none;
+}
+.toss-layer .bot::after {
+  display: none;
+}
+html.tossing,
+html.tossing * {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+/* extras: the heavy libraries only load when they're used */
+/* terminal button: thick border and offset shadow, like the tiles and Back */
+.terminal-launch {
+  position: fixed;
+  right: var(--gutter);
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 32;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 3px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--line);
+  font: 600 var(--step--1)/1 var(--read);
+  cursor: pointer;
+  transition:
+    transform 0.2s var(--out),
+    box-shadow 0.2s var(--out);
+}
+.terminal-launch:hover {
+  background: var(--slab);
+  color: var(--slab-ink);
+}
+.terminal-launch:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--line);
+}
+html[data-game-open] .terminal-launch {
+  visibility: hidden;
+}
+/* terminal window: a black slab with the green edge, like the page titles */
+.terminal-dialog {
+  width: min(880px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 3px solid #000;
+  background: #000;
+  color: var(--gray-1);
+  box-shadow:
+    inset 12px 0 0 var(--green),
+    8px 8px 0 var(--green);
+  overflow: auto;
+}
+.terminal-dialog::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 14px 32px;
+  border-bottom: 3px solid var(--gray-9);
+}
+.terminal-bar h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto 0 0;
+  font: 700 var(--step-1)/1.1 var(--display);
+  color: #fff;
+}
+.terminal-bar h2 .icon {
+  width: 24px;
+  height: 24px;
+  flex-basis: 24px;
+  color: var(--green-5);
+}
+.terminal-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 3px solid #fff;
+  background: #000;
+  color: #fff;
+  font: 600 var(--step--1)/1 var(--read);
+  cursor: pointer;
+}
+.terminal-bar button:hover {
+  background: #fff;
+  color: #000;
+}
+.terminal-dialog kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 2px 5px;
+  border: 2px solid var(--gray-7);
+  font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  text-align: center;
+  color: var(--gray-4);
+}
+.terminal-screen {
+  height: min(440px, 58dvh);
+  padding: 16px 16px 16px 32px;
+}
+.terminal-status {
+  margin: 12px 0 0;
+  padding: 0 16px 0 32px;
+  font: 14px/1.5 var(--read);
+  color: var(--gray-4);
+}
+.terminal-dialog footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 12px 16px 12px 32px;
+  border-top: 3px solid var(--gray-9);
+  font: 13px/1.5 var(--read);
+  color: var(--gray-5);
+}
+.terminal-dialog .xterm {
+  height: 100%;
+}
+.decoding {
+  position: relative;
+}
+.decode-original {
+  visibility: hidden;
+}
+.decode-visual {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* screenshot glitch (js/image-effects.js): the headings' red and cyan slices, on a picture */
+.img-glitch {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.game-preview > .img-glitch {
+  flex: 1;
+  min-height: 0;
+}
+.img-glitch > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.img-glitch > .gi {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.img-glitch > .gi-r {
+  filter: grayscale(1) sepia(1) saturate(8) hue-rotate(-45deg);
+}
+.img-glitch > .gi-c {
+  filter: grayscale(1) sepia(1) saturate(8) hue-rotate(145deg);
+}
+.img-glitch.on > .gi-r {
+  opacity: 0.9;
+  animation: gl-img 0.32s steps(2) both;
+}
+.img-glitch.on > .gi-c {
+  opacity: 0.9;
+  animation: gl-img 0.32s steps(2) reverse both;
+}
+@keyframes gl-img {
+  0% {
+    clip-path: inset(12% 0 62% 0);
+    transform: translate(-10px, 0);
+  }
+  25% {
+    clip-path: inset(54% 0 22% 0);
+    transform: translate(10px, 0);
+  }
+  50% {
+    clip-path: inset(30% 0 48% 0);
+    transform: translate(-7px, 2px);
+  }
+  75% {
+    clip-path: inset(72% 0 6% 0);
+    transform: translate(7px, -2px);
+  }
+  100% {
+    clip-path: inset(0 0 100% 0);
+    transform: none;
+  }
+}
+/* code snippets: closed it's one bordered row; open, a black file bar and the code with the
+   title slabs' green edge. syntax colours are the tile colours */
+.site-code {
+  margin-top: var(--space-xl);
+}
+.site-code > h3 {
+  margin: 0;
+  font: 700 var(--step-2)/1.15 var(--display);
+}
+.site-code > p {
+  margin: 6px 0 0;
+  color: var(--mute);
+}
+.site-code-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s);
+  align-items: start;
+  margin-top: var(--space-s);
+}
+.code-excerpt {
+  margin-top: 14px;
+  border: 3px solid var(--line);
+  background: var(--bg);
+}
+.site-code-grid .code-excerpt {
+  margin-top: 0;
+}
+.code-excerpt summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  list-style: none;
+  font: 600 var(--step--1)/1.3 var(--read);
+  cursor: pointer;
+}
+.code-excerpt summary::-webkit-details-marker {
+  display: none;
+}
+.code-excerpt summary::after {
+  content: "+";
+  flex: none;
+  width: 1em;
+  font: 700 22px/1 var(--display);
+  text-align: center;
+}
+.code-excerpt[open] summary::after {
+  content: "\2212";
+}
+.code-excerpt summary:hover,
+.code-excerpt[open] summary {
+  background: var(--slab);
+  color: var(--slab-ink);
+}
+.code-title {
+  flex: 1;
+  min-width: 0;
+}
+.code-file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 10px 14px 10px 24px;
+  border-top: 2px solid var(--gray-9);
+  background: #000;
+  box-shadow: inset 8px 0 0 var(--green);
+  color: var(--gray-5);
+  font: 12px/1.5 var(--read);
+  overflow-wrap: anywhere;
+}
+.code-file b {
+  color: #fff;
+  font: 600 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.code-file a {
+  color: var(--gray-3);
+}
+.code-excerpt pre {
+  margin: 0;
+  max-height: 420px;
+  overflow: auto;
+  border-top: 2px solid var(--gray-9);
+  background: #000;
+  box-shadow: inset 8px 0 0 var(--green);
+  color: var(--gray-1);
+}
+.code-excerpt code {
+  display: block;
+  padding: 14px 16px 16px 24px;
+  font: 12.5px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre;
+  tab-size: 2;
+}
+.code-excerpt .hljs-keyword,
+.code-excerpt .hljs-selector-tag,
+.code-excerpt .hljs-meta {
+  color: var(--yellow-3);
+}
+.code-excerpt .hljs-string,
+.code-excerpt .hljs-regexp {
+  color: var(--cyan-2);
+}
+.code-excerpt .hljs-number,
+.code-excerpt .hljs-literal {
+  color: var(--red-4);
+}
+.code-excerpt .hljs-title,
+.code-excerpt .hljs-function .hljs-title,
+.code-excerpt .hljs-title.function_ {
+  color: var(--indigo-3);
+}
+.code-excerpt .hljs-type,
+.code-excerpt .hljs-built_in,
+.code-excerpt .hljs-title.class_ {
+  color: var(--green-3);
+}
+.code-excerpt .hljs-comment {
+  color: var(--gray-6);
+  font-style: italic;
+}
+.code-excerpt .hljs-params,
+.code-excerpt .hljs-attr,
+.code-excerpt .hljs-property {
+  color: var(--gray-3);
+}
+
+/* projects get a wider column. every project is an element card like the home tiles (symbol,
+   number, thick border, offset shadow); the first goes full width with its preview, the rest in a grid */
+.page[data-section="projects"] .wrap {
+  --cw: clamp(740px, 72vw, 1120px);
+}
+.proj {
+  position: relative;
+  border: 3px solid var(--line);
+  background: var(--bg);
+  box-shadow: 5px 5px 0 var(--line);
+  padding: var(--space-s) var(--space-s-m) var(--space-s-m);
+}
+.proj-el {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+}
+.proj-sym {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 3px solid var(--line);
+  background: var(--c);
+  color: var(--t);
+  font: 700 20px/1 var(--display);
+}
+.proj-n {
+  font: 600 13px/1 var(--read);
+}
+.proj.lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--space-l);
+  align-items: start;
+}
+.proj.lead .project-preview {
+  align-self: stretch;
+  display: flex;
+}
+.proj.lead .game-preview {
+  flex: 1;
+  height: auto;
+  min-height: clamp(220px, 22vw, 340px);
+}
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-m);
+  /* cards keep their own height, so opening one card's code doesn't stretch the one next to it */
+  align-items: start;
+  margin-top: var(--space-m);
+}
+.proj.card,
+.proj.card .proj-text {
+  display: flex;
+  flex-direction: column;
+}
+.proj.card .proj-text {
+  flex: 1;
+}
+.proj.card h3 {
+  font-size: var(--step-1);
+}
+.proj-foot {
+  margin-top: auto;
+}
+.proj.card .shot {
+  margin: 0 0 var(--space-s);
+}
+@media (max-width: 860px) {
+  .proj.lead,
+  .proj-grid,
+  .site-code-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .proj.lead .game-preview {
+    min-height: 200px;
+  }
+}
+@media (max-width: 540px) {
+  .terminal-dialog {
+    width: calc(100% - 16px);
+    box-shadow:
+      inset 8px 0 0 var(--green),
+      4px 4px 0 var(--green);
+  }
+  .terminal-screen {
+    padding: 10px 10px 10px 20px;
+  }
+  .terminal-bar,
+  .terminal-status,
+  .terminal-dialog footer {
+    padding-left: 20px;
+  }
+  .terminal-bar button kbd {
+    display: none;
+  }
+}

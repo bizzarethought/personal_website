@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="version" content="v33 (2026-11-18)" />
+    <title>Garang Kiariga</title>
+    <meta
+      name="description"
+      content="Garang Kiariga, a computer science and neuroscience student at Emory. Research experience, projects and contact details."
+    />
+    <!-- link previews (LinkedIn, Slack, iMessage). once it's deployed, make og:image the full URL
+         (https://your-domain/img/og.jpg) and add og:url, most sites ignore relative paths -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Garang Kiariga" />
+    <meta
+      property="og:description"
+      content="Computer science and neuroscience student at Emory. Research experience, projects and contact details."
+    />
+    <meta property="og:image" content="img/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Garang's portfolio: a periodic table of four coloured tiles with small robots, above a flowering meadow"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%23121611%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2722%27 fill=%27%23000%27 stroke=%27%232F7D3A%27 stroke-width=%273%27/%3E%3Crect x=%2722%27 y=%2724%27 width=%277%27 height=%2716%27 rx=%273.5%27 fill=%27%2319FFB4%27/%3E%3Crect x=%2735%27 y=%2724%27 width=%277%27 height=%2716%27 rx=%273.5%27 fill=%27%23E3243B%27/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f%5B%5D=clash-display%40500%2C600%2C700&amp;display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f%5B%5D=chillax%40400%2C500%2C600&amp;display=swap"
+    />
+    <link rel="stylesheet" href="css/vendor/open-props.min.css?v=33" />
+    <link rel="stylesheet" href="css/styles.css?v=33" />
+  </head>
+  <body>
+    <div class="loader" id="loader" aria-hidden="true">
+      <b>gk</b>
+      <div class="lstage">
+        <span
+          class="lb"
+          style="
+            --w: 57px;
+            --sw: 1026px;
+            --x0: -342px;
+            --x1: -798px;
+            background-image: url(img/sheet-cobalt.webp?v=26);
+            animation-delay: 0s, 0s;
+          "
+        ></span
+        ><span
+          class="lb"
+          style="
+            --w: 43px;
+            --sw: 774px;
+            --x0: -258px;
+            --x1: -602px;
+            background-image: url(img/sheet-crimson.webp?v=26);
+            animation-delay:
+              -1.05s,
+              -0.11s;
+          "
+        ></span
+        ><span
+          class="lb"
+          style="
+            --w: 43px;
+            --sw: 774px;
+            --x0: -258px;
+            --x1: -602px;
+            background-image: url(img/sheet-sunflower.webp?v=26);
+            animation-delay:
+              -2.1s,
+              -0.22s;
+          "
+        ></span
+        ><span
+          class="lb"
+          style="
+            --w: 42px;
+            --sw: 756px;
+            --x0: -252px;
+            --x1: -588px;
+            background-image: url(img/sheet-teal.webp?v=26);
+            animation-delay:
+              -3.15s,
+              -0.33s;
+          "
+        ></span
+        ><span
+          class="lb"
+          style="
+            --w: 44px;
+            --sw: 792px;
+            --x0: -264px;
+            --x1: -616px;
+            background-image: url(img/sheet-snow.webp?v=26);
+            animation-delay:
+              -4.2s,
+              -0.44s;
+          "
+        ></span
+        ><span
+          class="lb"
+          style="
+            --w: 50px;
+            --sw: 900px;
+            --x0: -300px;
+            --x1: -700px;
+            background-image: url(img/sheet-original.webp?v=26);
+            animation-delay:
+              -5.25s,
+              -0.55s;
+          "
+        ></span
+        ><i class="lgrass"><s id="lbar"></s></i>
+      </div>
+      <p class="lcap" id="lcap">Growing the meadow</p>
+    </div>
+    <section class="home">
+      <header class="top">
+        <a class="logo" href="#">gk</a>
+        <nav aria-label="Sections" id="nav"></nav>
+      </header>
+      <main class="wrap">
+        <div class="hero" id="hero">
+          <h1 class="slab glitch" id="hello" data-text="Hi, I'm Garang.">
+            <span class="hello-text">Hi, I'm Garang.</span
+            ><span
+              class="smoss"
+              aria-hidden="true"
+              style="background-image: url(img/moss-hero.webp?v=26)"
+            ></span>
+          </h1>
+          <p class="intro" id="intro"></p>
+        </div>
+        <div class="board" id="board"></div>
+      </main>
+      <div
+        class="meadow"
+        id="meadow"
+        role="img"
+        aria-label="A flowering meadow, rendered in Blender for Intrusion"
+      ></div>
+    </section>
+    <div
+      class="page"
+      id="page"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ptitle"
+    ></div>
+
+    <button
+      type="button"
+      id="terminal-launch"
+      class="terminal-launch"
+      aria-haspopup="dialog"
+      aria-controls="terminal-dialog"
+      aria-expanded="false"
+      aria-keyshortcuts="`"
+    >
+      <span aria-hidden="true">&gt;_</span> Terminal
+    </button>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+    ></script>
+    <script defer src="js/vendor/gsap.min.js?v=33"></script>
+    <script defer src="js/vendor/SplitText.min.js?v=33"></script>
+    <script defer src="js/vendor/ScrollTrigger.min.js?v=33"></script>
+    <script defer src="js/vendor/matter.min.js?v=33"></script>
+    <script defer src="js/icons.js?v=33"></script>
+    <script defer src="js/content.js?v=33"></script>
+    <script defer src="js/runtime.js?v=33"></script>
+    <script defer src="js/robots.js?v=33"></script>
+    <script defer src="js/meadow.js?v=33"></script>
+    <script defer src="js/assets.js?v=33"></script>
+    <script defer src="js/text-effects.js?v=33"></script>
+    <script defer src="js/image-effects.js?v=33"></script>
+    <script defer src="js/code-excerpts.js?v=33"></script>
+    <script defer src="js/terminal.js?v=33"></script>
+    <script defer src="js/effects.js?v=33"></script>
+    <script defer src="js/motion.js?v=33"></script>
+    <script defer src="js/stars.js?v=33"></script>
+    <script defer src="js/sky.js?v=33"></script>
+    <script defer src="js/robot-guide.js?v=33"></script>
+    <script defer src="js/project-demos.js?v=33"></script>
+    <script defer src="js/navigation.js?v=33"></script>
+    <script defer src="js/home-robots.js?v=33"></script>
+    <script defer src="js/toss.js?v=33"></script>
+    <script defer src="js/main.js?v=33"></script>
+    <!-- analytics, off for now: sign up free at goatcounter.com, put in your code and uncomment.
+         no cookies, so no consent banner needed
+    <script data-goatcounter="https://YOUR-CODE.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+    -->
+  </body>
+</html>
