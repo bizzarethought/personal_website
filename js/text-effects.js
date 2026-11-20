@@ -9,6 +9,7 @@
       matchMedia('(prefers-reduced-motion: reduce)').matches
     )
       return;
+    if (heading.dataset.intro) return; // the entrance animation has the greeting right now
     const target = heading.querySelector('.hello-text') || heading;
     // SplitText owns the greeting while it animates in, so don't touch its nodes or the robot perch
     if (active.has(target) || target.children.length) return;

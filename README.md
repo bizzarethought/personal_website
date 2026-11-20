@@ -33,7 +33,7 @@ Each script is a plain `defer` script that adds to `window.Garang`, so the order
 Upload the whole folder to any static host (Cloudflare Pages, Netlify, GitHub Pages) with no build command.
 
 - After changing JS or CSS, bump the `?v=` number in `index.html` and `VERSION` in `js/assets.js`, or browsers keep the old cached files.
-- Once it's live, set `og:image` in `index.html` to the full URL and add `og:url`, so link previews show the picture.
+- The site lives at https://garangkiariga.tech. If the domain changes, update `og:url`, `og:image` and the canonical link in `index.html`.
 - Analytics: optional GoatCounter snippet at the bottom of `index.html`, commented out.
 
 ## Built with

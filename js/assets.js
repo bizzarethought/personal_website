@@ -2,7 +2,7 @@
   'use strict';
   const pending = new Map();
   /* same version as the script tags in index.html, so nobody gets a stale cached copy */
-  const VERSION = 'v=34';
+  const VERSION = 'v=35';
   function load(path, css = false) {
     const url = path.includes('?') ? path : `${path}?${VERSION}`;
     if (pending.has(url)) return pending.get(url);

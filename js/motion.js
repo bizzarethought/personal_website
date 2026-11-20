@@ -31,6 +31,11 @@
       const hello = $('#hello'),
         text = hello.querySelector('.hello-text'),
         cells = gsap.utils.toArray('.cell');
+      /* the robots' first glitch can still be decoding the heading here. finish it first, or SplitText
+         snapshots the half-scrambled copy and puts it back when it reverts. data-intro keeps any new
+         decode off the heading until the entrance is done */
+      app.textEffects?.cleanup(hello);
+      hello.dataset.intro = '1';
       /* only split the text span: the 3D robot's perch lives in the heading too, and revert() rewrites innerHTML */
       const label = hello.getAttribute('aria-label');
       hello.setAttribute('aria-label', text.textContent.trim());
@@ -42,6 +47,7 @@
           defaults: { ease: 'power4.out' },
           onComplete() {
             greeting.revert();
+            delete hello.dataset.intro;
             label ? hello.setAttribute('aria-label', label) : hello.removeAttribute('aria-label');
           },
         })
